@@ -1,0 +1,40 @@
+
+notifications:
+  email: false
+
+env:
+  global:
+  - TERM=dumb
+
+#language: java
+#jdk: oraclejdk8
+
+addons:
+  apt:
+    packages:
+    - sudo
+    - bash
+    - curl
+    - jq
+    - python-pip
+    - oraclejdk8
+
+install: true
+before_install:
+- sudo apt-get update -yqq >/dev/null
+- sudo apt-get install -yqq --no-install-suggests --no-install-recommends python-pip >/dev/null
+- sudo pip install httpie >/dev/null 2>&1
+- source <(curl -s https://raw.githubusercontent.com/daggerok/bash-functions/master/main.bash)
+- stop_any 8080 3000 80 >/dev/null
+
+script:
+- export root=$(pwd)
+#
+- ./gradlew >/dev/null
+- java -jar -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005 -Djava.net.preferIPv4Stack=true ./build/*-microbundle.jar &
+- wait_for 8080
+- sleep 15
+- http :8080
+- http :8080/maksimko
+- http :8080/max/bax
+- stop_any 80 8080
