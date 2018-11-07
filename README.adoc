@@ -1,18 +1,34 @@
-= payara-micro-gradle-plugin (build script) image:https://travis-ci.org/daggerok/payara-micro-example.svg?branch=master["Build Status", link="https://travis-ci.org/daggerok/payara-micro-example"]
+= payara-micro-gradle-plugin (no plugin) image:https://travis-ci.org/daggerok/payara-micro-gradle-no-plugin.svg?branch=master["Build Status", link="https://travis-ci.org/daggerok/payara-micro-gradle-no-plugin"]
 
-TODO: Add this template to link:https://github.com/daggerok/generator-jvm[generator-jvm] as `java-payara-micro` boilerplate
+__no plugin build script implementation__
 
-.build ROOT.war and deploy it into *-microbundle.jar
+Current project demonstrates regular Gradle functionality usage -
+payara-micro maven plugin similar gradle tasks implementation
+(`bundle` and `start`)
+
+.usage (similar to payara-micrio maven plugin)
+[source,bash]
+----
+./gradlew bundle
+
+./gradlew start
+# or
+java -jar build/*-microbundle.jar
+----
+
+== build, run and test
+
+.build
 [source,bash]
 ----
 ./gradlew clean bundle
-
-ls -lah ./build | grep jar
 ----
 
 .run (with remote debug for example)
 [source,bash]
 ----
+./gradle start
+# or debug:
 java -jar -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005  -Djava.net.preferIPv4Stack=true ./build/*-microbundle.jar
 ----
 
@@ -27,11 +43,7 @@ HTTP/1.1 202 Accepted
 Content-Length: 0
 Server: Payara Micro #badassfish
 X-Frame-Options: SAMEORIGIN
-----
 
-.test: verify
-[source,bash]
-----
 http :8080
 # output
 HTTP/1.1 200 OK
@@ -45,23 +57,4 @@ X-Frame-Options: SAMEORIGIN
     "one",
     "3"
 ]
-----
-
-.using gradle is very similar to maven
-[source,bash]
-----
-./gradlew bundle
-./gradlew start
-----
-
-TIP: see link:./payara.gradle[Payara Gradle] build file for details.
-
-.maven usage
-[source,bash]
-----
-./mvnw -Pbundle
-
-./mvnw -Pstart
-# or
-java -jar target/*-microbundle.jar
 ----

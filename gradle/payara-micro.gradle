@@ -22,18 +22,18 @@ apply plugin: 'war'
 war.archiveName = 'ROOT.war'
 
 configurations { payaraMicro }
-// 5.183 is broken, Uber Jar is fixed with 5.184
+// 5.183 is broken, uber jar is fixed with 5.184
 dependencies { payaraMicro 'fish.payara.extras:payara-micro:5.182' }
 
 task bundle(type: Exec) {
-    description('build payara-micro uber jar using existing war file.')
+    description('build payara-micro application uber jar.')
     shouldRunAfter('clean', 'war')
     dependsOn('war')
     commandLine runInShell("${command(project)} --outputUberJar ${outputUberJar(project)}")
 }
 
 task start(type: Exec) {
-    description("run payara-micro uber jar using 'java -jar ${outputUberJar(project)}' command.")
+    description("run payara-micro application.")
     shouldRunAfter('clean', 'war', 'bundle')
     dependsOn('bundle')
     commandLine runInShell("java -jar ${outputUberJar(project)}")

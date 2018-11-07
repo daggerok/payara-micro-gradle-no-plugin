@@ -6,26 +6,24 @@ env:
   global:
   - TERM=dumb
 
-#language: java
-#jdk: oraclejdk8
-
 addons:
   apt:
     packages:
-    - sudo
     - bash
     - curl
     - jq
     - python-pip
-    - oraclejdk8
+    - oracle-java8-installer
+    - oracle-java8-set-default
+    update: true
 
 install: true
 before_install:
-- sudo apt-get update -yqq >/dev/null
-- sudo apt-get install -yqq --no-install-suggests --no-install-recommends python-pip >/dev/null
 - sudo pip install httpie >/dev/null 2>&1
 - source <(curl -s https://raw.githubusercontent.com/daggerok/bash-functions/master/main.bash)
 - stop_any 8080 3000 80 >/dev/null
+- java -version
+- javac -version
 
 script:
 - export root=$(pwd)

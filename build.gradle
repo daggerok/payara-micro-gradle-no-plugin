@@ -34,4 +34,4 @@ dependencies {
   testRuntimeOnly 'org.junit.vintage:junit-vintage-engine'*/
 }
 
-apply from: project.file('./payara.gradle')
+apply from: project.file('./gradle/payara-micro.gradle')
