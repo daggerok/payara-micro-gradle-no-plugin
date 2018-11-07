@@ -12,12 +12,11 @@ import java.util.Set;
 @ApplicationScoped
 @ApplicationPath("")
 public class PayaraGradleAppConfig extends Application {
-
   @Override
   public Set<Class<?>> getClasses() {
-    final HashSet<Class<?>> classes = new HashSet<>();
-    classes.add(MyResource.class);
-    classes.add(ErrorHandler.class);
-    return classes;
+    return new HashSet<>(asList(
+        MyResource.class,
+        ErrorHandler.class
+    ));
   }
 }
