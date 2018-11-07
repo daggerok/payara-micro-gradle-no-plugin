@@ -35,3 +35,16 @@ dependencies {
 }
 
 apply from: project.file('./gradle/payara-micro.gradle')
+defaultTasks('bundle')
+
+project(':multi') {
+  apply from: 'https://raw.githubusercontent.com/daggerok/payara-micro-gradle-no-plugin/master/gradle/payara-micro.gradle'
+  defaultTasks 'bundle'
+
+  apply plugin: 'io.franzbecker.gradle-lombok'
+  lombok.version = '1.18.4'
+
+  dependencies {
+    providedCompile 'javax:javaee-api:8.0'
+  }
+}

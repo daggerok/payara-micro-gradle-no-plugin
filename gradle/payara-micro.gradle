@@ -14,13 +14,11 @@ static String[] runInShell(String... command) {
     shell + command
 }
 
-apply plugin: 'base'
-defaultTasks('clean', 'bundle')
-
 apply plugin: 'war'
 // workaround for context-root: '/'
 war.archiveName = 'ROOT.war'
 
+repositories { mavenCentral() }
 configurations { payaraMicro }
 // 5.183 is broken, uber jar is fixed with 5.184
 dependencies { payaraMicro 'fish.payara.extras:payara-micro:5.182' }
