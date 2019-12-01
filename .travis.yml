@@ -44,7 +44,7 @@ jobs:
                     -Djava.net.preferIPv4Stack=true
                       ./build/*-microbundle.jar &
         - wait_for 8080
-        - sleep 15
+        - sleep 35
         - http :8080
         - http :8080/maksimko
         - http :8080/max/bax

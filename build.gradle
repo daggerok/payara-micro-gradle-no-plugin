@@ -1,9 +1,10 @@
 buildscript {
   ext {
+    //payaraMicroVersion = "5.194" // instead, we will be using payara-micro version from here:
+    // https://raw.githubusercontent.com/daggerok/payara-micro-gradle-no-plugin/master/gradle/payara-micro.gradle
     javaVersion = JavaVersion.VERSION_1_8
-    gradleWrapperVersion = "5.6.4"
+    gradleWrapperVersion = "6.0.1"
     junitJupiterVersion = "5.3.1"
-    payaraMicroVersion = "5.194"
     lombokVersion = "1.18.10"
     javaeeVersion = "8.0.1"
     log4jVersion = "2.12.1"
@@ -17,7 +18,13 @@ plugins {
   id("io.spring.dependency-management") version "1.0.8.RELEASE"
 }
 
-lombok.version = project.lombokVersion
+wrapper {
+  gradleVersion = project.gradleWrapperVersion
+}
+
+lombok {
+  version = project.lombokVersion
+}
 
 dependencyManagement {
   imports {
@@ -40,10 +47,6 @@ repositories {
   mavenCentral()
 }
 
-wrapper {
-  gradleVersion = project.gradleWrapperVersion
-}
-
 dependencies {
   providedCompile("javax:javaee-api:${project.javaeeVersion}")
 }
@@ -56,7 +59,9 @@ project(":multi") {
   defaultTasks("bundle")
 
   apply(plugin: "io.franzbecker.gradle-lombok")
-  lombok.version = project.lombokVersion
+  lombok {
+    version = project.lombokVersion
+  }
 
   dependencies {
     providedCompile("javax:javaee-api:${project.javaeeVersion}")
