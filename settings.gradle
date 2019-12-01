@@ -1,1 +1,2 @@
-include('multi')
+rootProject.name = "payara-micro-gradle-no-plugin"
+include(":multi")

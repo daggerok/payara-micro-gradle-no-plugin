@@ -1,50 +1,64 @@
-plugins {
-  id 'war'
-  id 'io.franzbecker.gradle-lombok' version '1.14'
-  id 'io.spring.dependency-management' version '1.0.6.RELEASE'
-}
-
-lombok.version = '1.18.4'
-
-dependencyManagement {
-  imports {
-    mavenBom 'org.junit:junit-bom:5.3.1'
-    mavenBom 'org.apache.logging.log4j:log4j-bom:2.11.1'
+buildscript {
+  ext {
+    javaVersion = JavaVersion.VERSION_1_8
+    gradleWrapperVersion = "5.6.4"
+    junitJupiterVersion = "5.3.1"
+    payaraMicroVersion = "5.194"
+    lombokVersion = "1.18.10"
+    javaeeVersion = "8.0.1"
+    log4jVersion = "2.12.1"
   }
 }
 
-version '1.0.0-SNAPSHOT'
-group 'com.github.daggerok'
-sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
+plugins {
+  id("war")
+  id("io.franzbecker.gradle-lombok") version "3.2.0"
+  id("com.github.ben-manes.versions") version "0.27.0"
+  id("io.spring.dependency-management") version "1.0.8.RELEASE"
+}
+
+lombok.version = project.lombokVersion
+
+dependencyManagement {
+  imports {
+    mavenBom("org.junit:junit-bom:${project.junitJupiterVersion}")
+    mavenBom("org.apache.logging.log4j:log4j-bom:${project.log4jVersion}")
+  }
+}
+
+allprojects {
+  version = "1.0.1-SNAPSHOT"
+  group = "com.github.daggerok"
+}
+
+java {
+  sourceCompatibility = project.javaVersion
+  targetCompatibility = project.javaVersion
+}
 
 repositories {
   mavenCentral()
 }
 
 wrapper {
-  gradleVersion = '5.0-rc-1' // For more details see https://docs.gradle.org/5.0-rc-1/release-notes.html
-  distributionType = 'BIN'
+  gradleVersion = project.gradleWrapperVersion
 }
 
 dependencies {
-  providedCompile 'javax:javaee-api:8.0'
-  /*testImplementation 'org.assertj:assertj-core:3.11.1'
-  testImplementation 'org.junit.jupiter:junit-jupiter-api'
-  testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
-  testRuntimeOnly 'org.junit.vintage:junit-vintage-engine'*/
+  providedCompile("javax:javaee-api:${project.javaeeVersion}")
 }
 
-apply from: project.file('./gradle/payara-micro.gradle')
-defaultTasks('bundle')
+apply(from: project.file("./gradle/payara-micro.gradle"))
+defaultTasks("bundle")
 
-project(':multi') {
-  apply from: 'https://raw.githubusercontent.com/daggerok/payara-micro-gradle-no-plugin/master/gradle/payara-micro.gradle'
-  defaultTasks 'bundle'
+project(":multi") {
+  apply(from: "https://raw.githubusercontent.com/daggerok/payara-micro-gradle-no-plugin/master/gradle/payara-micro.gradle")
+  defaultTasks("bundle")
 
-  apply plugin: 'io.franzbecker.gradle-lombok'
-  lombok.version = '1.18.4'
+  apply(plugin: "io.franzbecker.gradle-lombok")
+  lombok.version = project.lombokVersion
 
   dependencies {
-    providedCompile 'javax:javaee-api:8.0'
+    providedCompile("javax:javaee-api:${project.javaeeVersion}")
   }
 }

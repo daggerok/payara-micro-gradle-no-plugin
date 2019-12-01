@@ -10,31 +10,32 @@ static String outputUberJar(Project project) {
 }
 
 static String[] runInShell(String... command) {
-    String[] shell = Os.isFamily(Os.FAMILY_WINDOWS) ? ['cmd', '/c'] : ['sh', '-c']
+    String[] shell = Os.isFamily(Os.FAMILY_WINDOWS) ? ["cmd", "/c"] : ["sh", "-c"]
     shell + command
 }
 
-apply plugin: 'war'
-// workaround for context-root: '/'
-war.archiveName = 'ROOT.war'
+apply(plugin: "war")
+war { // call war file as ROOT.war... it's just a workaround for context-root: "/"
+    archiveFileName.set("ROOT.war")
+}
 
 repositories { mavenCentral() }
 configurations { payaraMicro }
 // 5.183 is broken, uber jar is fixed with 5.184
-dependencies { payaraMicro 'fish.payara.extras:payara-micro:5.182' }
+dependencies { payaraMicro("fish.payara.extras:payara-micro:${project.payaraMicroVersion}") }
 
 task bundle(type: Exec) {
-    description('build payara-micro application uber jar.')
-    shouldRunAfter('clean', 'war')
-    dependsOn('war')
-    commandLine runInShell("${command(project)} --outputUberJar ${outputUberJar(project)}")
+    description("build payara-micro application uber jar.")
+    shouldRunAfter("clean", "war")
+    dependsOn("war")
+    commandLine(runInShell("${command(project)} --outputUberJar ${outputUberJar(project)}"))
 }
 
 task start(type: Exec) {
     description("run payara-micro application.")
-    shouldRunAfter('clean', 'war', 'bundle')
-    dependsOn('bundle')
-    commandLine runInShell("java -jar ${outputUberJar(project)}")
+    shouldRunAfter("clean", "war", "bundle")
+    dependsOn("bundle")
+    commandLine(runInShell("java -jar ${outputUberJar(project)}"))
 }
 
 assemble.dependsOn(bundle)
