@@ -9,20 +9,19 @@ payara-micro maven plugin similar gradle tasks implementation
 == remote
 
 .install
-[source,gradle]
+[source,groovy]
 ----
-apply from: https://raw.githubusercontent.com/daggerok/payara-micro-gradle-no-plugin/master/gradle/payara-micro.gradle'
-defaultTasks 'bundle'
+apply(from: "https://raw.githubusercontent.com/daggerok/payara-micro-gradle-no-plugin/master/gradle/payara-micro.gradle")
+defaultTasks("bundle")
 ----
 
 .usage
-[source,gradle]
+[source,bash]
 ----
 ./gradlew start
-
 # or
 ./gradlew bundle
-ls ./build | grep 'microbundle'
+ls ./build | grep "microbundle"
 java -jar build/*-microbundle.jar
 ----
 
@@ -31,10 +30,10 @@ requirements: expected to be used for war packaged projects
 == local
 
 .install link:https://github.com/daggerok/payara-micro-gradle-no-plugin/blob/master/gradle/payara-micro.gradle[see ./gradle/payara-micro.gradle build script file]
-[source,bash]
+[source,groovy]
 ----
-apply(from: project.file('./gradle/payara-micro.gradle'))
-defaultTasks('bundle')
+apply(from: project.file("./gradle/payara-micro.gradle"))
+defaultTasks("bundle")
 ----
 
 .usage (similar to payara-micrio maven plugin)
@@ -52,16 +51,18 @@ java -jar build/*-microbundle.jar
 .install
 [source,groovy]
 ----
-project(':multi') {
-  apply from: 'https://raw.githubusercontent.com/daggerok/payara-micro-gradle-no-plugin/master/gradle/payara-micro.gradle'
-  defaultTasks 'bundle'
+project(":multi") {
+  apply(from: "https://raw.githubusercontent.com/daggerok/payara-micro-gradle-no-plugin/master/gradle/payara-micro.gradle")
+  defaultTasks("bundle")
 
   // other configurations are skipped, but just in case:
-  apply plugin: 'io.franzbecker.gradle-lombok'
-  lombok.version = '1.18.4'
+  apply(plugin: "io.franzbecker.gradle-lombok")
+  lombok {
+    version = "1.18.10"
+  }
 
   dependencies {
-    providedCompile 'javax:javaee-api:8.0'
+    providedCompile("javax:javaee-api:8.0.1")
   }
 }
 ----
@@ -75,7 +76,7 @@ project(':multi') {
 # or (better):
 ./gradlew clean bundle
 java -jar ./build/*-microbundle.jar &
-java -jar ./nulti/build/*-microbundle.jar &
+java -jar ./multi/build/*-microbundle.jar &
 ----
 
 == build, run and test
@@ -94,26 +95,40 @@ java -jar ./nulti/build/*-microbundle.jar &
 java -jar -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005  -Djava.net.preferIPv4Stack=true ./build/*-microbundle.jar
 ----
 
-.test: post new data
+.test
 [source,bash]
 ----
 http :8080 string=one
 http :8080 string=two
 http :8080 string=3
-# output:
+----
+
+.post new data
+[source,http request]
+----
 HTTP/1.1 202 Accepted
 Content-Length: 0
 Server: Payara Micro #badassfish
 X-Frame-Options: SAMEORIGIN
+----
 
+.verify
+[source,bash]
+----
 http :8080
-# output
+----
+
+[source,http request]
+----
 HTTP/1.1 200 OK
 Content-Length: 17
 Content-Type: application/json
 Server: Payara Micro #badassfish
 X-Frame-Options: SAMEORIGIN
+----
 
+[source,json]
+----
 [
     "two",
     "one",
