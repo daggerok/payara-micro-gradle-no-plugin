@@ -1,5 +1,11 @@
 import org.apache.tools.ant.taskdefs.condition.Os
 
+buildscript {
+    ext {
+        payaraMicroVersion = "5.194"
+    }
+}
+
 static String command(Project project) {
     def payaraMicroJar = project.configurations.payaraMicro.asPath
     "java -jar ${payaraMicroJar} --autoBindHttp --clusterName app --deploy ${project.war.archivePath}"
