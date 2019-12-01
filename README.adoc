@@ -104,7 +104,7 @@ http :8080 string=3
 ----
 
 .post new data
-[source,http request]
+[source,http]
 ----
 HTTP/1.1 202 Accepted
 Content-Length: 0
@@ -118,7 +118,7 @@ X-Frame-Options: SAMEORIGIN
 http :8080
 ----
 
-[source,http request]
+[source,http]
 ----
 HTTP/1.1 200 OK
 Content-Length: 17
