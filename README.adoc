@@ -135,3 +135,31 @@ X-Frame-Options: SAMEORIGIN
     "3"
 ]
 ----
+
+== java 11
+
+.java 9+ problem solving
+[source, bash]
+----
+java --add-modules java.se \
+     --add-exports java.base/jdk.internal.ref=ALL-UNNAMED \
+     --add-opens java.base/java.lang=ALL-UNNAMED \
+     --add-opens java.base/java.nio=ALL-UNNAMED \
+     --add-opens java.base/sun.nio.ch=ALL-UNNAMED \
+     --add-opens java.management/sun.management=ALL-UNNAMED \
+     --add-opens jdk.management/com.sun.management.internal=ALL-UNNAMED \
+     --add-opens java.base/jdk.internal.loader=ALL-UNNAMED \
+     --add-opens jdk.zipfs/jdk.nio.zipfs=ALL-UNNAMED \
+      -jar -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005 \
+           -Djava.net.preferIPv4Stack=true \
+             ./build/*-microbundle.jar
+----
+
+== my other payara-related repositories
+
+* link:https://github.com/daggerok/payara-micro-gradle-no-plugin[GitHub: daggerok/payara-micro-gradle-no-plugin]
+* link:https://github.com/daggerok/payara-micro-gradle-plugin-build-script[GitHub: daggerok/payara-micro-gradle-plugin-build-script]
+* link:https://github.com/daggerok/maven-java-projects[GitHub: daggerok/maven-java-projects]
+* link:https://github.com/daggerok/generator-jvm[GitHub: daggerok/generator-jvm]
+* link:https://github.com/daggerok/payara-micro-example[GitHub: daggerok/payara-micro-example]
+* link:https://github.com/daggerok/microprofile-examples[GitHub: daggerok/microprofile-examples]
